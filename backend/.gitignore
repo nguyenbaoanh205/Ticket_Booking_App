@@ -1,0 +1,16 @@
+# Node modules
+node_modules/
+
+# Tệp môi trường
+.env
+
+# Các tệp log
+*.log
+
+# Thư mục build
+dist/
+build/
+
+# Các tệp hệ thống
+.DS_Store
+Thumbs.db
