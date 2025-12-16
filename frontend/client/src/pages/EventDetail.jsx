@@ -4,6 +4,7 @@ import { getEventDetail } from "../api/event.api";
 import axios from "../api/axios";
 
 function EventDetail() {
+  const token = localStorage.getItem("token");
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,14 +17,28 @@ function EventDetail() {
     setLoading(true);
 
     // 1. Tạo booking
-    const bookingRes = await axios.post("/bookings", {
-      eventId: id
-    });
+    const bookingRes = await axios.post(
+      "/bookings",
+      { eventId: id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
 
     // 2. Tạo checkout
-    const checkout = await axios.post("/payments/create-checkout", {
-      bookingId: bookingRes.data._id
-    });
+    const checkout = await axios.post(
+      "/payments/create-checkout",
+      {
+        bookingId: bookingRes.data._id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
 
     window.location.href = checkout.data.url;
   };
