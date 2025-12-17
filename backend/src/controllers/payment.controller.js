@@ -1,4 +1,6 @@
-const stripe = require("../config/stripe");
+// const stripe = require("../config/stripe");
+const Stripe = require("stripe");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const Booking = require("../models/Booking");
 const Event = require("../models/Event");
 
@@ -21,6 +23,7 @@ exports.createCheckout = async (req, res) => {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
+            client_reference_id: booking._id.toString(), // 👈 thêm dòng này
             line_items: [
                 {
                     price_data: {
@@ -29,13 +32,12 @@ exports.createCheckout = async (req, res) => {
                             name: event.title,
                             description: event.location
                         },
-                        // unit_amount: event.price // nhớ là đơn vị VND
-                        unit_amount: event.price * 100
+                        unit_amount: event.price // nhớ là đơn vị VND
                     },
                     quantity: 1
                 }
             ],
-            success_url: `${process.env.FRONTEND_URL}/payment-success`,
+            success_url: `${process.env.FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.FRONTEND_URL}/payment-cancel`,
             metadata: {
                 bookingId: booking._id.toString()
@@ -55,11 +57,6 @@ exports.createCheckout = async (req, res) => {
 
 
 exports.webhook = async (req, res) => {
-    console.log("👉 webhook hit");
-    console.log("👉 body type:", typeof req.body);
-    console.log("👉 body length:", req.body?.length);
-
-
     const sig = req.headers["stripe-signature"];
 
     let event;
@@ -80,16 +77,20 @@ exports.webhook = async (req, res) => {
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
 
-        if (session.payment_status === "paid") {
-            const bookingId = session.metadata.bookingId;
+        const bookingId = session.client_reference_id; // 👈 đổi chỗ này
 
-            await Booking.findByIdAndUpdate(bookingId, {
-                status: "paid"
-            });
-
-            console.log("✅ Booking paid:", bookingId);
+        if (!bookingId) {
+            console.error("❌ Missing bookingId");
+            return res.json({ received: true });
         }
+
+        await Booking.findByIdAndUpdate(bookingId, {
+            status: "paid"
+        });
+
+        console.log("✅ Booking paid:", bookingId);
     }
+
 
     res.json({ received: true });
 };

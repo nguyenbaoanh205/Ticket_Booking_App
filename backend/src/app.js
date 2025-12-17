@@ -3,25 +3,18 @@ const cors = require("cors");
 
 const app = express();
 
-// ❗ WEBHOOK PHẢI ĐỨNG ĐẦU
+// ✅ WEBHOOK PHẢI ĐỨNG TRƯỚC express.json
 app.post(
   "/api/payments/webhook",
   express.raw({ type: "application/json" }),
   require("./controllers/payment.controller").webhook
 );
 
-// 👉 CHỈ parse JSON cho các route khác
-app.use((req, res, next) => {
-  if (req.originalUrl === "/api/payments/webhook") {
-    next();
-  } else {
-    express.json()(req, res, next);
-  }
-});
-
+// Middleware thường
 app.use(cors());
+app.use(express.json());
 
-// routes
+// Routes
 app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/events", require("./routes/event.route"));
 app.use("/api/bookings", require("./routes/booking.route"));
