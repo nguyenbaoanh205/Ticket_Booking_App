@@ -1,6 +1,4 @@
-// const stripe = require("../config/stripe");
-const Stripe = require("stripe");
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = require("../config/stripe");
 const Booking = require("../models/Booking");
 const Event = require("../models/Event");
 
