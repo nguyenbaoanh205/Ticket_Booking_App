@@ -7,6 +7,9 @@ node_modules/
 # Các tệp log
 *.log
 
+# Thư mục chứa mã QR của khách hàng
+public/qrs/
+
 # Thư mục build
 dist/
 build/
