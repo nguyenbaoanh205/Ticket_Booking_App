@@ -1,7 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
+
+app.use(
+  "/qrs",
+  express.static(path.join(__dirname, "public/qrs"))
+);
 
 // ✅ WEBHOOK PHẢI ĐỨNG TRƯỚC express.json
 app.post(

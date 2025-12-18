@@ -1,5 +1,8 @@
 const stripe = require("../config/stripe");
 const Booking = require("../models/Booking");
+const generateQR = require("../utils/generateQR");
+const sendTicketMail = require("../utils/sendTicketMail");
+const User = require("../models/User");
 const Event = require("../models/Event");
 
 exports.createCheckout = async (req, res) => {
@@ -74,7 +77,6 @@ exports.webhook = async (req, res) => {
 
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
-
         const bookingId = session.client_reference_id; // 👈 đổi chỗ này
 
         if (!bookingId) {
@@ -82,11 +84,50 @@ exports.webhook = async (req, res) => {
             return res.json({ received: true });
         }
 
-        await Booking.findByIdAndUpdate(bookingId, {
-            status: "paid"
+        // Tìm booking theo ID
+        const booking = await Booking.findById(bookingId).populate("eventId userId");
+
+        if (!booking) {
+            console.error("❌ Booking not found:", bookingId);
+            return res.json({ received: true });
+        }
+
+        if (booking.status === "paid") {
+            return res.json({ received: true });
+        }
+
+        // Tạo mã vé
+        const ticketCode = `TICKET-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        // Tạo mã QR
+        const qrPayload = {
+            bookingId: booking._id.toString(),
+            userId: booking.userId._id.toString(),
+            ticketCode: ticketCode
+        };
+
+        const qrImagePath = await generateQR(
+            qrPayload,
+            `booking_${booking._id}`
+        );
+
+        // Cập nhật trạng thái booking
+        booking.status = "paid";
+        booking.ticketCode = ticketCode;
+        booking.qrCode = qrImagePath;
+        await booking.save();
+
+        // Gửi email vé
+        await sendTicketMail({
+            to: booking.userId.email,
+            userName: booking.userId.name,
+            event: booking.eventId,
+            ticketCode,
+            qrCode: qrImagePath
         });
 
-        console.log("✅ Booking paid:", bookingId);
+        console.log("✅ Paid + QR + Email sent:", bookingId);
+
     }
 
 
