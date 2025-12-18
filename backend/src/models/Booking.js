@@ -14,13 +14,22 @@ const bookingSchema = new mongoose.Schema({
     enum: ["pending", "paid", "failed", "cancelled", "used"],
     default: "pending"
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
   qrCode: String,
   ticketCode: String,
   stripeSessionId: String,
+  usedAt: {
+    type: Date,
+    default: null
+  },
+  isUsed: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);
