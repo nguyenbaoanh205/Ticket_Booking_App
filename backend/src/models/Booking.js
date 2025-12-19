@@ -20,11 +20,11 @@ const bookingSchema = new mongoose.Schema({
   usedAt: {
     type: Date,
     default: null
-  },
+  }, // thời gian sử dụng vé
   isUsed: {
     type: Boolean,
     default: false
-  },
+  }, // trạng thái vé đã sử dụng
   createdAt: {
     type: Date,
     default: Date.now,

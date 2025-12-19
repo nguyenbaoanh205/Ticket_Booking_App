@@ -5,7 +5,7 @@ import axios from "../api/axios";
 export default function AdminScan() {
     const scannerRef = useRef(null);
     const [message, setMessage] = useState("");
-    const scannedRef = useRef(false); // 🚫 chống scan liên tục
+    const scannedRef = useRef(false); 
 
     useEffect(() => {
         if (scannerRef.current) return;
@@ -13,8 +13,8 @@ export default function AdminScan() {
         const scanner = new Html5QrcodeScanner(
             "reader",
             {
-                fps: 10,
-                qrbox: 250
+                fps: 30,
+                qrbox: 200
             },
             false
         );
