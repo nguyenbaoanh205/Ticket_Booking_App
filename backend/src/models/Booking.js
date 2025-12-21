@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+// đổi sang book được nhiều vé tách riêng bảng booking, thêm bảng ticket
+
 const bookingSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
