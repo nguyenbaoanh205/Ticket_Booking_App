@@ -8,6 +8,7 @@ function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     getEventDetail(id).then((res) => setEvent(res.data));
@@ -19,7 +20,7 @@ function EventDetail() {
     // 1. Tạo booking
     const bookingRes = await axios.post(
       "/bookings",
-      { eventId: id },
+      { eventId: id, quantity },
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -50,6 +51,14 @@ function EventDetail() {
       <h1>{event.title}</h1>
       <p>{event.location}</p>
       <p>Giá: {event.price} VND</p>
+      <label>Số lượng vé:</label>
+      <input
+        type="number"
+        min={1}
+        value={quantity}
+        onChange={(e) => setQuantity(Number(e.target.value))}
+        style={{ width: 60, marginLeft: 10 }}
+      />
 
       <button onClick={bookTicket} disabled={loading}>
         {loading ? "Đang xử lý..." : "Đặt vé"}
