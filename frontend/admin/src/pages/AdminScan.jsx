@@ -29,7 +29,7 @@ export default function AdminScan() {
                     const payload = JSON.parse(decodedText);
 
                     const res = await axios.post("/admin/checkin", {
-                        bookingId: payload.bookingId
+                        ticketCode: payload.ticketCode
                     });
 
                     setMessage(res.data.message);
