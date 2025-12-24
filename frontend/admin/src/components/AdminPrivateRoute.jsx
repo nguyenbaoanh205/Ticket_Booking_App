@@ -4,7 +4,7 @@ export default function AdminPrivateRoute({ children }) {
   const token = localStorage.getItem("admin_token");
 
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return children;

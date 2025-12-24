@@ -7,7 +7,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<AdminLogin />} />
+        <Route path="/" element={<AdminLogin />} />
 
         <Route
           path="/scan"
