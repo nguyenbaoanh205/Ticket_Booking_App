@@ -3,6 +3,7 @@ const Booking = require("../models/Booking");
 const generateQR = require("../utils/generateQR");
 const sendTicketMail = require("../utils/sendTicketMail");
 const User = require("../models/User");
+const Ticket = require("../models/Ticket");
 const Event = require("../models/Event");
 
 exports.createCheckout = async (req, res) => {
@@ -35,7 +36,7 @@ exports.createCheckout = async (req, res) => {
                         },
                         unit_amount: event.price // nhớ là đơn vị VND
                     },
-                    quantity: 1
+                    quantity: booking.quantity
                 }
             ],
             success_url: `${process.env.FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
@@ -77,15 +78,15 @@ exports.webhook = async (req, res) => {
 
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
-        const bookingId = session.client_reference_id; // 👈 đổi chỗ này
+        const bookingId = session.client_reference_id;
 
         if (!bookingId) {
             console.error("❌ Missing bookingId");
             return res.json({ received: true });
         }
 
-        // Tìm booking theo ID
-        const booking = await Booking.findById(bookingId).populate("eventId userId");
+        const booking = await Booking.findById(bookingId)
+            .populate("eventId userId");
 
         if (!booking) {
             console.error("❌ Booking not found:", bookingId);
@@ -96,41 +97,61 @@ exports.webhook = async (req, res) => {
             return res.json({ received: true });
         }
 
-        // Tạo mã vé
-        const ticketCode = `TICKET-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        // ✅ KIỂM TRA VÉ
+        if (booking.eventId.availableTickets < booking.quantity) {
+            console.error("❌ Not enough tickets");
+            return res.json({ received: true });
+        }
 
-        // Tạo mã QR
-        const qrPayload = {
-            bookingId: booking._id.toString(),
-            userId: booking.userId._id.toString(),
-            ticketCode: ticketCode
-        };
+        booking.eventId.availableTickets -= booking.quantity;
+        await booking.eventId.save();
 
-        const qrImagePath = await generateQR(
-            qrPayload,
-            `booking_${booking._id}`
-        );
 
-        // Cập nhật trạng thái booking
+        // ✅ Update booking
         booking.status = "paid";
-        booking.ticketCode = ticketCode;
-        booking.qrCode = qrImagePath;
         await booking.save();
 
-        // Gửi email vé
+        // ✅ SINH VÉ THEO SỐ LƯỢNG
+        const tickets = [];
+
+        for (let i = 0; i < booking.quantity; i++) {
+            const ticketCode = `TICKET-${Date.now()}-${i}`;
+
+            const qrPayload = {
+                ticketCode,
+                bookingId: booking._id.toString(),
+                userId: booking.userId._id.toString()
+            };
+
+            const qrImagePath = await generateQR(
+                qrPayload,
+                `ticket_${ticketCode}`
+            );
+            // console.log("👉 after generateQR", qrImagePath);
+
+            tickets.push({
+                bookingId: booking._id,
+                eventId: booking.eventId._id,
+                userId: booking.userId._id,
+                ticketCode,
+                qrCode: qrImagePath
+            });
+        }
+
+        await Ticket.insertMany(tickets);
+
+        // ✅ Gửi mail (nhiều QR)
         await sendTicketMail({
             to: booking.userId.email,
             userName: booking.userId.name,
             event: booking.eventId,
-            ticketCode,
-            qrCode: qrImagePath
+            tickets // 👈 gửi mảng vé
         });
 
-        console.log("✅ Paid + QR + Email sent:", bookingId);
-
+        console.log("✅ Paid + Tickets created:", bookingId);
     }
-
 
     res.json({ received: true });
 };
+
 

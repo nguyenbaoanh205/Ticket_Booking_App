@@ -1,45 +1,49 @@
-const Booking = require("../../models/Booking");
-const Event = require("../../models/Event");
-const User = require("../../models/User");
+const Ticket = require("../../models/Ticket");
 
 exports.checkInByQR = async (req, res) => {
   try {
-    const { bookingId } = req.body;
+    const { ticketCode } = req.body;
 
-    if (!bookingId) {
-      return res.status(400).json({ message: "Missing bookingId" });
+    if (!ticketCode) {
+      return res.status(400).json({ message: "Missing ticketCode" });
     }
 
-    const booking = await Booking.findById(bookingId)
-      .populate("userId", "name email")
-      .populate("eventId", "title");
+    const ticket = await Ticket.findOne({ ticketCode })
+      .populate({
+        path: "bookingId",
+        select: "status",
+        populate: [
+          { path: "userId", select: "name email" },
+          { path: "eventId", select: "title" }
+        ]
+      });
 
-    if (!booking) {
+    if (!ticket) {
       return res.status(404).json({ message: "❌ Vé không tồn tại" });
     }
 
-    if (booking.status !== "paid") {
+    if (ticket.bookingId.status !== "paid") {
       return res.status(400).json({ message: "❌ Vé chưa thanh toán" });
     }
 
-    if (booking.isUsed) {
+    if (ticket.isUsed) {
       return res.status(400).json({ message: "❌ Vé đã được sử dụng" });
     }
 
-    // ✅ Đánh dấu vé đã dùng
-    booking.isUsed = true;
-    booking.usedAt = new Date();
-    await booking.save();
+    ticket.isUsed = true;
+    ticket.usedAt = new Date();
+    await ticket.save();
 
-    res.json({
+    return res.json({
       message: "✅ Check-in thành công",
-      ticketCode: booking.ticketCode,
-      user: booking.userId.name,
-      event: booking.eventId.title
+      ticketCode: ticket.ticketCode,
+      user: ticket.bookingId.userId.name,
+      event: ticket.bookingId.eventId.title,
+      usedAt: ticket.usedAt
     });
 
   } catch (err) {
     console.error("❌ Check-in error:", err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
