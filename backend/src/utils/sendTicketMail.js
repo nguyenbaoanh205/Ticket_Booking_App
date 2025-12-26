@@ -59,46 +59,95 @@ module.exports = async ({ to, userName, event, tickets }) => {
     subject: `🎫 Vé tham dự sự kiện: ${event.title}`,
     html: `
       <!DOCTYPE html>
-      <html>
+      <html lang="vi">
       <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Vé sự kiện</title>
       </head>
-      <body style="font-family:Arial,sans-serif; background:#fff; color:#333;">
-        <div style="max-width:600px; margin:20px auto;">
 
-          <h2 style="text-align:center;">Thanh toán thành công 🎉</h2>
-          <p style="text-align:center;">
-            Xin chào <strong>${userName}</strong>,<br/>
-            Dưới đây là vé tham dự sự kiện của bạn:
-          </p>
+      <body style="margin:0; padding:0; background-color:#f3f4f6; font-family:Arial, Helvetica, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6; padding:20px 0;">
+          <tr>
+            <td align="center">
 
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
-            <tr>
-              <td><strong>Sự kiện:</strong></td>
-              <td>${event.title}</td>
-            </tr>
-            <tr>
-              <td><strong>Địa điểm:</strong></td>
-              <td>${event.location}</td>
-            </tr>
-            <tr>
-              <td><strong>Thời gian:</strong></td>
-              <td>${eventDate}</td>
-            </tr>
-          </table>
+              <!-- Container -->
+              <table width="100%" cellpadding="0" cellspacing="0" 
+                style="max-width:600px; background:#ffffff; border-radius:12px; overflow:hidden;">
 
-          ${ticketsHtml}
+                <!-- Header -->
+                <tr>
+                  <td style="padding:24px; text-align:center; background:#0f172a; color:#ffffff;">
+                    <h1 style="margin:0; font-size:22px;">🎉 Thanh toán thành công</h1>
+                    <p style="margin:8px 0 0; font-size:14px; opacity:0.9;">
+                      Ticket Booking System
+                    </p>
+                  </td>
+                </tr>
 
-          <p style="text-align:center; margin-top:40px; font-size:14px; color:#777;">
-            Vui lòng xuất trình QR code khi check-in.<br/>
-            Chúc bạn tham gia sự kiện vui vẻ!
-          </p>
+                <!-- Content -->
+                <tr>
+                  <td style="padding:24px; color:#333333;">
+                    <p style="margin:0 0 16px; font-size:16px;">
+                      Xin chào <strong>${userName}</strong>,
+                    </p>
 
-        </div>
+                    <p style="margin:0 0 24px; font-size:15px; line-height:1.6;">
+                      Cảm ơn bạn đã thanh toán thành công.  
+                      Dưới đây là thông tin vé tham dự sự kiện của bạn:
+                    </p>
+
+                    <!-- Event info -->
+                    <table width="100%" cellpadding="0" cellspacing="0"
+                      style="background:#f8fafc; border-radius:8px; padding:16px;">
+                      <tr>
+                        <td style="padding:6px 0; font-size:14px;"><strong>Sự kiện:</strong></td>
+                        <td style="padding:6px 0; font-size:14px;">${event.title}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; font-size:14px;"><strong>Địa điểm:</strong></td>
+                        <td style="padding:6px 0; font-size:14px;">${event.location}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; font-size:14px;"><strong>Thời gian:</strong></td>
+                        <td style="padding:6px 0; font-size:14px;">${eventDate}</td>
+                      </tr>
+                    </table>
+
+                    <!-- Tickets -->
+                    <div style="margin-top:24px;">
+                      ${ticketsHtml}
+                    </div>
+
+                    <!-- Note -->
+                    <div style="margin-top:32px; text-align:center;">
+                      <p style="margin:0; font-size:14px; color:#555;">
+                        📱 Vui lòng xuất trình <strong>QR code</strong> khi check-in
+                      </p>
+                      <p style="margin:8px 0 0; font-size:14px; color:#777;">
+                        Chúc bạn tham gia sự kiện vui vẻ!
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td style="padding:16px; text-align:center; background:#f8fafc; font-size:12px; color:#888;">
+                    © ${new Date().getFullYear()} Ticket Booking System  
+                    <br/> Email này được gửi tự động, vui lòng không trả lời
+                  </td>
+                </tr>
+
+              </table>
+
+            </td>
+          </tr>
+        </table>
       </body>
       </html>
-    `,
+  `,
     attachments
   });
+
 };
