@@ -5,6 +5,7 @@ import axios from "../api/axios";
 export default function AdminScan() {
     const scannerRef = useRef(null);
     const lockRef = useRef(false);
+    const [flash, setFlash] = useState("");
 
     const [message, setMessage] = useState("");
     const [type, setType] = useState("");
@@ -34,19 +35,22 @@ export default function AdminScan() {
 
                     setMessage(res.data.message);
                     setType("success");
+                    setFlash("success");
 
+                    setTimeout(() => setFlash(""), 600);
                 } catch (err) {
-                    setMessage(
-                        err.response?.data?.message || "❌ QR không hợp lệ"
-                    );
+                    setMessage(err.response?.data?.message || "❌ QR không hợp lệ");
                     setType("error");
+                    setFlash("error");
+
+                    setTimeout(() => setFlash(""), 600);
                 }
 
                 // 🛑 TẮT CAMERA SAU KHI QUÉT
                 await scanner.clear();
                 setScanning(false);
             },
-            () => {}
+            () => { }
         );
 
         scannerRef.current = scanner;
@@ -73,8 +77,21 @@ export default function AdminScan() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6">
+        <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4 relative">
+
+            {flash && (
+                <div
+                    className={`
+                    fixed inset-0 z-50 pointer-events-none
+                    transition-opacity duration-500
+                    ${flash === "success"
+                            ? "bg-green-300/40"
+                            : "bg-red-300/40"}
+                `}
+                />
+            )}
+
+            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 relative z-10">
 
                 <h2 className="text-2xl font-bold text-center text-slate-800 mb-4">
                     📷 Admin Scan QR
@@ -91,7 +108,12 @@ export default function AdminScan() {
 
                 {message && (
                     <div
-                        className={`mt-4 text-sm border rounded-md px-3 py-2 text-center ${messageStyle[type]}`}
+                        className={`
+                        mt-4 text-sm border rounded-md px-3 py-2 text-center
+                        transform transition-all duration-500
+                        animate-fade-in-up
+                        ${messageStyle[type]}
+                    `}
                     >
                         {message}
                     </div>
@@ -100,7 +122,11 @@ export default function AdminScan() {
                 {!scanning && (
                     <button
                         onClick={handleRescan}
-                        className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition"
+                        className="
+                        mt-6 w-full bg-blue-600 hover:bg-blue-700
+                        text-white py-2 rounded-lg font-semibold
+                        transition transform hover:scale-[1.02] active:scale-[0.97]
+                    "
                     >
                         🔄 Quét vé tiếp theo
                     </button>

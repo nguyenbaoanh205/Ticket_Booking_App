@@ -21,13 +21,29 @@
 
 /* ===== Center placeholder image (camera illustration) ===== */
 .qr-wrapper img {
-  display: block !important;
-  margin: 0 auto !important;
-  opacity: 0.85;
-  width: 96px;
+    display: block !important;
+    margin: 0 auto !important;
+    opacity: 0.85;
+    width: 96px;
 }
 
 /* Hide library branding text if có */
 .qr-wrapper a {
     @apply hidden;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.4s ease-out;
 }
