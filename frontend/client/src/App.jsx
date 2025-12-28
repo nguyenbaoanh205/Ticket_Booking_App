@@ -5,6 +5,7 @@ import EventDetail from "./pages/EventDetail";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import Login from "./pages/Login";
+import LandingPage from "./pages/LandingPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -14,7 +15,8 @@ function App() {
       <Routes>
         {/* Public */}
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Events />} />
+        <Route path="/" element={<LandingPage />} />
+        {/* <Route path="/" element={<Events />} /> */}
         <Route path="/events/:id" element={<EventDetail />} />
 
         {/* Payment result */}
