@@ -1,3 +1,6 @@
+import { motion } from "framer-motion";
+import { fadeUp, staggerContainer } from "../animations/motion";
+
 export default function StatsStrip() {
   const stats = [
     { label: "HỌC VIÊN", value: "150+" },
@@ -7,10 +10,17 @@ export default function StatsStrip() {
 
   return (
     <section className="bg-[#F8FAFC] py-14">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 md:grid-cols-3 gap-8 px-8">
+      <motion.div
+        className="mx-auto grid max-w-6xl grid-cols-1 md:grid-cols-3 gap-8 px-8"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         {stats.map((item) => (
-          <div
+          <motion.div
             key={item.label}
+            variants={fadeUp}
             className="rounded-2xl bg-white py-10 text-center shadow-[0_20px_40px_rgba(15,23,42,0.08)]"
           >
             <p className="text-2xl font-semibold text-[#C9A227]">
@@ -19,9 +29,9 @@ export default function StatsStrip() {
             <p className="mt-2 text-xs tracking-widest text-slate-500">
               {item.label}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
