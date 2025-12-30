@@ -9,6 +9,7 @@ router.put("/:id", auth, isAdmin, ctrl.update);
 router.delete("/:id", auth, isAdmin, ctrl.delete);
 
 // Client
+router.get("/latest", ctrl.getLatest);
 router.get("/", ctrl.getAll);
 router.get("/:id", ctrl.getDetail);
 

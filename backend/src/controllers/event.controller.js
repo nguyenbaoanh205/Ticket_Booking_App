@@ -29,6 +29,17 @@ exports.delete = async (req, res) => {
   res.json({ message: "Event deleted successfully" });
 };
 
+exports.getLatest = async (req, res) => {
+  const event = await Event.findOne()
+    .sort({ createdAt: -1 });
+
+  if (!event) {
+    return res.status(404).json({ message: "No event found" });
+  }
+
+  res.json(event);
+};
+
 exports.getAll = async (req, res) => {
   const events = await Event.find();
   res.json(events);

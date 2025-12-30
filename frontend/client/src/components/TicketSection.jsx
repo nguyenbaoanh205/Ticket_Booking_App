@@ -62,16 +62,6 @@ export default function TicketSection() {
     }
   };
 
-  if (loading) {
-    return (
-      <section className="bg-[#F8FAFC] py-32">
-        <div className="mx-auto max-w-3xl rounded-3xl bg-white px-12 py-16 shadow">
-          <p className="text-center text-slate-400">Đang tải sự kiện...</p>
-        </div>
-      </section>
-    );
-  }
-
   if (!event) return null;
   return (
     <section className="bg-[#F8FAFC] py-32">
@@ -85,6 +75,10 @@ export default function TicketSection() {
         <h2 className="text-center text-2xl font-semibold text-slate-900">
           Đăng ký {event.title}
         </h2>
+
+        <h3 className="mt-4 text-center text-xl text-slate-800">
+          Địa điểm: {event.location}
+        </h3>
 
         <p className="mt-4 text-center text-sm text-slate-500">
           Vé còn lại: <span className="text-[#C9A227]">{event.availableTickets}</span>

@@ -6,7 +6,11 @@ const eventSchema = new mongoose.Schema({
   date: Date,
   price: Number,
   totalTickets: Number,
-  availableTickets: Number
+  availableTickets: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model("Event", eventSchema);
