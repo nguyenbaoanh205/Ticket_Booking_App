@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Header() {
   return (
     <header className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
@@ -19,9 +21,12 @@ export default function Header() {
           <a className="hover:text-[#C9A227] transition">Đặt vé</a>
         </nav>
 
-        <button className="rounded-md border border-[#C9A227] px-6 py-2 text-xs tracking-widest text-[#C9A227] hover:bg-[#C9A227] hover:text-white transition">
+        <Link
+          to="/login"
+          className="rounded-md border border-[#C9A227] px-6 py-2 text-xs tracking-widest text-[#C9A227] hover:bg-[#C9A227] hover:text-white transition"
+        >
           ĐĂNG NHẬP
-        </button>
+        </Link>
       </div>
     </header>
   );
