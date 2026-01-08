@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,6 +19,8 @@ function Login() {
     try {
       const res = await axios.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user);
       navigate("/");
     } catch {
       setError("Email hoặc mật khẩu không đúng");
