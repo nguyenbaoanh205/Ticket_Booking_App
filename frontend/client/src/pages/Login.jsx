@@ -30,14 +30,14 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-50 to-white px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-100 via-gray-50 to-white px-4">
       <div className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-xl border border-gray-100">
 
         <button
           onClick={() => navigate(-1)}
           className="absolute left-4 top-4 text-sm text-gray-500 hover:text-gray-900 cursor-pointer"
         >
-          ← Quay lại
+          Quay lại
         </button>
 
         <div className="mb-6 text-center mt-2">
