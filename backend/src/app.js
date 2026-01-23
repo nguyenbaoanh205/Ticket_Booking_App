@@ -22,6 +22,7 @@ app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/events", require("./routes/event.route"));
 app.use("/api/bookings", require("./routes/booking.route"));
 app.use("/api/payments", require("./routes/payment.route"));
+app.use("/api/tickets", require("./routes/ticket.route"));
 
 app.use("/api/admin", require("./routes/admin.route"));
 
