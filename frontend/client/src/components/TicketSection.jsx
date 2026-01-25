@@ -64,7 +64,7 @@ export default function TicketSection() {
 
   if (!event) return null;
   return (
-    <section className="bg-[#F8FAFC] py-32">
+    <section id="dat-ve" className="bg-[#F8FAFC] py-32 scroll-mt-28">
       <motion.div
         variants={fadeUp}
         initial="hidden"

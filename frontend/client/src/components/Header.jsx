@@ -23,10 +23,17 @@ export default function Header() {
 
         {/* Menu */}
         <nav className="hidden md:flex gap-10 text-sm text-slate-600">
-          <a className="hover:text-[#C9A227] transition">Nội dung</a>
-          <a className="hover:text-[#C9A227] transition">Quy trình</a>
-          <a className="hover:text-[#C9A227] transition">Đặt vé</a>
+          <a href="#noi-dung" className="hover:text-[#C9A227] transition">
+            Nội dung
+          </a>
+          <a href="#quy-trinh" className="hover:text-[#C9A227] transition">
+            Quy trình
+          </a>
+          <a href="#dat-ve" className="hover:text-[#C9A227] transition">
+            Đặt vé
+          </a>
         </nav>
+
 
         {/* Auth */}
         {!user ? (

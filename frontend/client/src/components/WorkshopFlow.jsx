@@ -10,7 +10,7 @@ export default function WorkshopFlow() {
   ];
 
   return (
-    <section className="bg-[#F8FAFC] py-32">
+    <section id="quy-trinh" className="bg-[#F8FAFC] py-32 scroll-mt-28">
       <motion.div
         className="mx-auto max-w-6xl px-8"
         variants={staggerContainer}
