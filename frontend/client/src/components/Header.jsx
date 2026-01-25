@@ -48,6 +48,12 @@ export default function Header() {
 
             {open && (
               <div className="absolute right-0 mt-2 w-40 rounded-md bg-white shadow-lg border">
+                <Link
+                  to="/my-tickets"
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-slate-100"
+                >
+                  Vé của tôi
+                </Link>
                 <button
                   onClick={logout}
                   className="w-full px-4 py-2 text-left text-sm hover:bg-slate-100"

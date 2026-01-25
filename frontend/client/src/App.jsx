@@ -5,6 +5,7 @@ import PaymentCancel from "./pages/PaymentCancel";
 import Login from "./pages/Login";
 import LandingPage from "./pages/LandingPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import MyTickets from "./pages/MyTickets";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
+        <Route path="/my-tickets" element={<MyTickets />} />
 
         {/* Payment result */}
         <Route
