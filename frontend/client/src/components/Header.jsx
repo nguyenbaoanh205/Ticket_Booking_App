@@ -8,9 +8,9 @@ export default function Header() {
   return (
     <header className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
-        
+
         {/* Logo */}
-        <div className="flex items-center gap-4">
+        <Link to="/" className="flex items-center gap-4">
           <img
             src="https://thumbs.dreamstime.com/b/glitch-tech-banner-futuristic-geometric-modern-technology-cyberpunk-style-hi-badge-289981863.jpg"
             alt="Logo"
@@ -19,7 +19,7 @@ export default function Header() {
           <span className="text-sm font-semibold tracking-[0.35em] text-slate-900">
             WORKSHOP 2025
           </span>
-        </div>
+        </Link>
 
         {/* Menu */}
         <nav className="hidden md:flex gap-10 text-sm text-slate-600">
@@ -40,7 +40,7 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => setOpen(!open)}
-              className="flex items-center gap-2 text-sm font-medium text-slate-700"
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer"
             >
               {user.name}
               <span className="text-xs">▼</span>
