@@ -11,12 +11,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/my-tickets" element={<MyTickets />} />
 
-        {/* Payment result */}
         <Route
           path="/payment-success"
           element={
@@ -27,7 +25,6 @@ function App() {
         />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
 
-        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
